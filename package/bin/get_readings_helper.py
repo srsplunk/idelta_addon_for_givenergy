@@ -1,5 +1,6 @@
 import json
 import logging
+import requests
 
 import import_declare_test
 from solnlib import conf_manager, log
@@ -23,17 +24,22 @@ def get_account_api_key(session_key: str, account_name: str):
     return account_conf_file.get(account_name).get("api_key")
 
 
-def get_data_from_api(logger: logging.Logger, api_key: str):
+def get_data_from_api(logger: logging.Logger, api_key: str, serial_no:str):
     logger.info("Getting data from an external API")
-    dummy_data = [
-        {
-            "line1": "hello",
-        },
-        {
-            "line2": "world",
-        },
-    ]
-    return dummy_data
+    url = "https://api.givenergy.cloud/v1/inverter/"+serial_no+"/system-data/latest"
+    logger.debug("URL being called:" + url)
+    logger.debug("Constructing header with API key")
+    header = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'}
+    header['Authorization']= "Bearer " + api_key
+    # commented out so API Key cannot be logged 
+    # logger.debug("header constructed as python dict: " + str(header))
+    payload={}
+    response = requests.request("GET", url, headers=header, data=payload)
+    logger.info("API call status code: " + str(response.status_code))
+    logger.debug("Response: " + response.text)
+    return response.text
 
 
 def validate_input(definition: smi.ValidationDefinition):
@@ -45,6 +51,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
     # {
     #   "get_readings://<input_name>": {
     #     "account": "<account_name>",
+    #     "serial_no": "<inverter_serial_no>",
     #     "disabled": "0",
     #     "host": "$decideOnStartup",
     #     "index": "<index_name>",
@@ -66,16 +73,18 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             logger.setLevel(log_level)
             log.modular_input_start(logger, normalized_input_name)
             api_key = get_account_api_key(session_key, input_item.get("account"))
-            data = get_data_from_api(logger, api_key)
-            sourcetype = "dummy-data"
-            for line in data:
-                event_writer.write_event(
+            inverter_serial_number = input_item.get("serial_no")
+            data = get_data_from_api(logger, api_key, inverter_serial_number)
+            sourcetype = "givenergy:inverter:systemdata"
+            event_writer.write_event(
                     smi.Event(
-                        data=json.dumps(line, ensure_ascii=False, default=str),
+                        data=data,
                         index=input_item.get("index"),
                         sourcetype=sourcetype,
                     )
                 )
+            
+            
             log.events_ingested(
                 logger,
                 input_name,
@@ -86,4 +95,4 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             )
             log.modular_input_end(logger, normalized_input_name)
         except Exception as e:
-            log.log_exception(logger, e, "my custom error type", msg_before="Exception raised while ingesting data for demo_input: ")
+            log.log_exception(logger, e, "Error getting data for input", msg_before="Exception raised while ingesting data for " +input_name)
