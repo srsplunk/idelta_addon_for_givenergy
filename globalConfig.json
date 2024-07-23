@@ -82,6 +82,26 @@
                             "required": true
                         },
                         {
+                            "type": "text",
+                            "label": "Inverter Serial Number",
+                            "field": "serial_no",
+                            "help": "The serial number of the inverter to pull data for",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and numbers",
+                                    "pattern": "^[a-zA-Z0-9]*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be 10 characters",
+                                    "minLength": 10,
+                                    "maxLength": 10
+                                }
+                            ]
+                        },
+                        {
                             "type": "interval",
                             "label": "Interval",
                             "defaultValue": "300",
@@ -93,6 +113,27 @@
                                 ]
                             },
                             "help": "Time interval of the data input, in seconds.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Index",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Index Name must begin with a letter or number and consist exclusively of lowercase letters, numbers, underscores or dashes",
+                                    "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "index",
+                            "help": "The index the data is stored in",
+                            "defaultValue": "givenergy",
                             "required": true
                         },
                         {
@@ -172,12 +213,13 @@
     "meta": {
         "name": "idelta_addon_for_givenergy",
         "restRoot": "idelta_addon_for_givenergy",
-        "version": "0.0.1",
+        "version": "0.0.1R881eada",
         "displayName": "iDelta Add-on For GivEnergy",
         "schemaVersion": "0.0.8",
         "supportedThemes": [
             "light",
             "dark"
-        ]
+        ],
+        "_uccVersion": "5.48.1"
     }
 }
