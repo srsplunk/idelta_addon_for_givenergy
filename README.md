@@ -22,3 +22,51 @@ Alternatively you can download and install the already packaged app from splunkb
 
 # Splunkbase
 This add-on is available to download and install direct from [splunkbase](https://splunkbase.splunk.com/app/7480)
+
+# Installation and Configuration
+The add-on can be run from a standalone splunk server, a heavy forwarder or dedicated data ingestion server, an IDM (for Splunk Cloud Classic stacks) or direct on the search heads (Splunk Cloud Victoria).
+## Installation
+There are four ways to install the add-on:
+1. From your Splunk server use the Apps > Find More Apps menu option and search for GivEnergy, then install
+2. Download the add-on from Splunkbase and install onto your Splunk server using Apps > Manage Apps > Install app from file
+3. Clone/Fork the code from this repo, build and package using ucc-gen, then install the package using method (2) above
+4. Clone/Fork the code from this repo, build and then either copy (to splunk server etc/apps directory) or symlink the folder within your build directory
+Option 1 is the easiest and is recommended if you want to try out the add-on.  Option 4 is useful if you plan to make code changes.
+## Configuration
+You need two things to run the add-on:
+* a GivEnergy API Key
+* the serial number of your inverter
+### API Key and Serial Number
+The API key can be generated using the [GivEnery Portal](https://givenergy.cloud).  Navigate to Account Settings > Manage Account Security > My API Keys.
+The Serial Number can be viewed by choosing the My Inverter option in the portal menu.  The serial number is displayed to the top-right of the image of the inverter.  
+### Add-on Account Setup
+In Splunk Web go into the Add-on and access the Configuration > Accounts page.  Click Add, then supply a name for your site/account and the API key.
+### Inputs Setup
+From the Inputs tab, click on Create New Input.  Supply the values as indicated below:
+Name: Give the input a name
+Inverter Serial Number: provide the inverter serial number
+Interval: choose how frequently you want to collect the readings, note that the values supplied by the API only change every 5 minutes so 300 is recommended
+Account to use: select the account you setup in the previous section
+# Using the data
+As an example the following splunk search will generate a graph showing the power input/output to/from the battery, solar and grid:
+```
+index=givenergy
+|timechart span=5m 
+max(data.battery.power) as battery 
+max(data.grid.power) as grid 
+max(data.solar.power) as solar
+```
+The following search will return the current battery charge level (as a percentage):
+```
+index=givenergy
+|stats latest(data.battery.percent) as battery_charge
+```
+# Troubleshooting
+The monitoring dashboard within the add-on provides an overview of the add-on operations.
+The following search will show the internal log for the add-on:
+```
+index=_internal source=*idelta_addon_for_givenergy*
+```
+Debug logging can be enabled via Configuration > Logging
+
+You can check if the API call works, independently of Splunk and the add-on, using the curl command for the [Get Latest System Data API](https://givenergy.cloud/docs/api/v1#inverter-data-GETinverter--inverter_serial_number--system-data-latest)
