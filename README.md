@@ -15,5 +15,10 @@ This add-on allows you to ingest data from the GivEnergy API, specifically the G
 
 [GivEnergy API documentation](https://givenergy.cloud/docs/api/v1#inverter-data-GETinverter--inverter_serial_number--system-data-latest)
 
+# UCC Framework
+This add-on uses the Splunk [UCC Framework](https://splunk.github.io/addonfactory-ucc-generator/).  Once you clone or fork the code from this repository, use ucc-gen to [build](https://splunk.github.io/addonfactory-ucc-generator/quickstart/#ucc-gen-build) and [package](https://splunk.github.io/addonfactory-ucc-generator/quickstart/#ucc-gen-package) the Splunk app.  
+
+Alternatively you can download and install the already packaged app from splunkbase. 
+
 # Splunkbase
 This add-on is available to download and install direct from [splunkbase](https://splunkbase.splunk.com/app/7480)
