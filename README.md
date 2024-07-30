@@ -62,13 +62,16 @@ index=givenergy
 |stats latest(data.battery.percent) as battery_charge
 ```
 # Troubleshooting
-Check the [issues](https://github.com/srsplunk/idelta_addon_for_givenergy/issues) listed in this repository.
-The monitoring dashboard within the add-on provides an overview of the add-on operations.
-The following search will show the internal log for the add-on:
+* Check the [issues](https://github.com/srsplunk/idelta_addon_for_givenergy/issues) listed in this repository.
+
+* The monitoring dashboard within the add-on provides an overview of the add-on operations.
+
+* The following search will show the internal log for the add-on:
 ```
 index=_internal source=*idelta_addon_for_givenergy*
 ```
-Debug logging can be enabled via Configuration > Logging
+* Debug logging can be enabled via Configuration > Logging
 
-You can check if the API call works, independently of Splunk and the add-on, using the curl command for the [Get Latest System Data API](https://givenergy.cloud/docs/api/v1#inverter-data-GETinverter--inverter_serial_number--system-data-latest)
-You can add an issue to the repository if none of the above help.
+* You can check if the API call works, independently of Splunk and the add-on, using the curl command for the [Get Latest System Data API](https://givenergy.cloud/docs/api/v1#inverter-data-GETinverter--inverter_serial_number--system-data-latest)
+
+* You can add an issue to the repository if none of the above help.
