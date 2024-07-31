@@ -34,13 +34,13 @@ There are four ways to install the add-on:
 Option 1 is the easiest and is recommended if you want to try out the add-on.  Option 4 is useful if you plan to make code changes.
 ## Configuration
 You need two things to run the add-on:
-* a GivEnergy API Key
+* a GivEnergy API Token
 * the serial number of your inverter
-### API Key and Serial Number
-The API key can be generated using the [GivEnery Portal](https://givenergy.cloud).  Navigate to Account Settings > Manage Account Security > My API Keys.
+### API Token and Serial Number
+The API Token can be generated using the [GivEnery Portal](https://givenergy.cloud).  Navigate to Account Settings > Manage Account Security > Manage API Tokens.  You can set appropriate access levels for the token, e.g. read only and data access.
 The Serial Number can be viewed by choosing the My Inverter option in the portal menu.  The serial number is displayed to the top-right of the image of the inverter.  
 ### Add-on Account Setup
-In Splunk Web go into the Add-on and access the Configuration > Accounts page.  Click Add, then supply a name for your site/account and the API key.
+In Splunk Web go into the Add-on and access the Configuration > Accounts page.  Click Add, then supply a name for your site/account and the API token.
 ### Inputs Setup
 From the Inputs tab, click on Create New Input.  Supply the values as indicated below:
 Name: Give the input a name
